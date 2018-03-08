@@ -261,3 +261,12 @@ data path: /home/itheima/workspace/go/src/lovehome/fastdfs/storage_data/data, mk
 [2018-03-06 15:47:44] INFO - file: storage_func.c, line: 257, tracker_client_ip: 192.168.40.128, my_server_id_str: 192.168.40.128, g_server_id_in_filename: -2144819008
 [2018-03-06 15:47:44] INFO - file: tracker_client_thread.c, line: 310, successfully connect to tracker server 192.168.40.128:22122, as a tracker client, my ip is 192.168.40.128
 [2018-03-06 15:48:14] INFO - file: tracker_client_thread.c, line: 1263, tracker server 192.168.40.128:22122, set tracker leader: 192.168.40.128:22122
+[2018-03-06 20:25:12] ERROR - file: storage_nio.c, line: 282, client ip: 192.168.40.128, recv timeout, recv offset: 0, expect length: 0
+[2018-03-06 20:25:12] ERROR - file: storage_nio.c, line: 282, client ip: 192.168.40.128, recv timeout, recv offset: 0, expect length: 0
+[2018-03-06 20:25:12] ERROR - file: storage_nio.c, line: 282, client ip: 192.168.40.128, recv timeout, recv offset: 0, expect length: 0
+[2018-03-06 20:25:12] ERROR - file: storage_nio.c, line: 282, client ip: 192.168.40.128, recv timeout, recv offset: 0, expect length: 0
+[2018-03-06 20:25:12] ERROR - file: storage_nio.c, line: 282, client ip: 192.168.40.128, recv timeout, recv offset: 0, expect length: 0
+[2018-03-06 20:25:12] ERROR - file: storage_nio.c, line: 282, client ip: 192.168.40.128, recv timeout, recv offset: 0, expect length: 0
+[2018-03-06 20:25:12] ERROR - file: storage_nio.c, line: 282, client ip: 192.168.40.128, recv timeout, recv offset: 0, expect length: 0
+[2018-03-06 20:25:12] ERROR - file: storage_nio.c, line: 282, client ip: 192.168.40.128, recv timeout, recv offset: 0, expect length: 0
+[2018-03-06 20:25:12] ERROR - file: storage_nio.c, line: 282, client ip: 192.168.40.128, recv timeout, recv offset: 0, expect length: 0
