@@ -62,7 +62,7 @@ func (this *UpImageControllers) UpHouseImage() {
 		return
 	}
 	image := models.HouseImage{}
-	image_url := "http://192.168.40.128:8080/" + fileId
+	image_url := "http://" + ip + ":" + port + "/" + fileId
 	image.House = &house
 	image.Url = fileId
 
