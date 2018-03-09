@@ -10,10 +10,10 @@ type HouseController struct {
 	beego.Controller
 }
 
-//func (this *HousesIndexController) RetData(resp interface{}) {
-//	this.Data["json"] = resp
-//	this.ServeJSON()
-//}
+func (this *HouseController) RetData(resp interface{}) {
+	this.Data["json"] = resp
+	this.ServeJSON()
+}
 
 func (this *HouseController) GetHouseDetail() {
 	beego.Info("GetHouseDetail .....")
@@ -22,6 +22,7 @@ func (this *HouseController) GetHouseDetail() {
 	resp := make(map[string]interface{})
 	resp["errno"] = models.RECODE_OK
 	resp["errmsg"] = models.RecodeText(models.RECODE_OK)
+	defer this.RetData(resp)
 
 	o := orm.NewOrm()
 	qs := o.QueryTable("house")
