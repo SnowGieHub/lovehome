@@ -32,6 +32,7 @@ func init() {
 	beego.Router("/api/v1.0/user", &controllers.UserSessionController{}, "get:ReadUserSession")
 	beego.Router("/api/v1.0/houses/:id", &controllers.HouseController{}, "get:GetHouseDetail")
 	beego.Router("/api/v1.0/houses", &controllers.HouseSearchController{}, "get:HouseSearch")
+	beego.Router("/api/v1.0/orders", &controllers.OrderController{}, "post:OrderRelease")
 
 	//2
 	//龚文斌
