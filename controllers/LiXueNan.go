@@ -25,12 +25,17 @@ func (this *UserController) PutName() {
 
 	defer this.RetData(resp)
 
+	//创建map json数组
 	var regRequestMap = make(map[string]interface{})
 
+	//将前端返回的json格式解析到定义好的结构体
 	json.Unmarshal(this.Ctx.Input.RequestBody, &regRequestMap)
 
+	this.Ctx.Input.URL()
+	//获取用户Id，根据Id去数据库查找
 	user_id := this.GetSession("user_id")
 
+	//打印
 	beego.Info("name = ", regRequestMap["name"])
 
 	//2.将数据存入mysql数据库 user
