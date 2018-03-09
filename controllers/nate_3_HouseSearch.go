@@ -85,6 +85,7 @@ func (this *HouseSearchController) HouseSearch() {
 	o := orm.NewOrm()
 
 	var houses []models.House
+	dataMap := make(map[string]interface{})
 
 	qs := o.QueryTable("house")
 	_, err = qs.Filter("area__id", intAid).All(&houses)
@@ -95,6 +96,7 @@ func (this *HouseSearchController) HouseSearch() {
 		resp["errmsg"] = models.RecodeText(models.RECODE_DBERR)
 		return
 	}
-	resp["houses"] = houses
+	dataMap["houses"] = houses
+	resp["data"] = dataMap
 	//把数据发挥前端
 }
