@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	//"encoding/json"
+	"encoding/json"
 	//"fmt"
 	"github.com/astaxie/beego"
 	//"github.com/astaxie/beego/cache"
@@ -31,11 +31,17 @@ func (this *OrderController) OrderRelease() {
 
 	defer this.RetData(resp)
 
-	getHid := this.GetString("house_id")
-	getSd := this.GetString("start_date")
-	getEd := this.GetString("end_date")
+	var regRequestMap = make(map[string]interface{})
+	json.Unmarshal(this.Ctx.Input.RequestBody, &regRequestMap)
+	getHid := regRequestMap["house_id"].(string)
+	getSd := regRequestMap["start_date"].(string)
+	getEd := regRequestMap["end_date"].(string)
+
 	if getHid == "" || getSd == "" || getEd == "" {
 		beego.Info("URL中Get后的参数有空值")
+		beego.Info("house_id: ", getHid)
+		beego.Info("start_date: ", getSd)
+		beego.Info("end_date", getEd)
 		resp["errno"] = models.RECODE_PARAMERR
 		resp["errmsg"] = models.RecodeText(models.RECODE_PARAMERR)
 		return
