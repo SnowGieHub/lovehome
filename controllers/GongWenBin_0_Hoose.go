@@ -9,12 +9,6 @@ import (
 	"strconv"
 )
 
-/*
-	路由路径
-	beego.Router("/api/v1.0/houses", &controllers.HousesController{}, "post:ReleaseHouseInfo")
-	beego.Router("/api/v1.0/houses", &controllers.HousesController{}, "post:ReleaseHouseInfo")
-	beego.Router("/api/v1.0/houses/:id/images", &controllers.UpImageControllers{} "post:UpHouseImage")
-*/
 type HousesController struct {
 	beego.Controller
 }
@@ -47,11 +41,12 @@ func (this *HousesController) ReleaseHouseInfo() {
 
 	array := regRequestMap["facility"].([]interface{})
 	lenth := len(array)
+
 	facilites_arr := make([]*models.Facility, lenth)
+
 	for i := 0; i < lenth; i++ {
 		facilites_arr[i] = new(models.Facility)
 		facilites_arr[i].Id, _ = strconv.Atoi(array[i].(string))
-		o.Read(facilites_arr[i])
 	}
 
 	house.Title = regRequestMap["title"].(string)
@@ -79,18 +74,14 @@ func (this *HousesController) ReleaseHouseInfo() {
 		return
 	}
 
-	m2m := o.QueryM2M(&house, "facility_houses")
+	m2m := o.QueryM2M(&house, "Facilities")
+	if _, err := m2m.Add(facilites_arr); err != nil {
+		beego.Info("m2m  insert error = ", err)
+		resp["errno"] = models.RECODE_DBERR
+		resp["errmsg"] = models.RecodeText(models.RECODE_DBERR)
+		return
+	}
 
-	o.Insert(m2m)
-	/*
-		_, err = o.InsertMulti(lenth, facilites_arr)
-		if err != nil {
-			beego.Info("insert error = ", err)
-			resp["errno"] = models.RECODE_DBERR
-			resp["errmsg"] = models.RecodeText(models.RECODE_DBERR)
-			return
-		}
-		i*/
 	house_id := make(map[string]interface{})
 	house_id["house_id"] = id
 	resp["data"] = house_id
@@ -123,6 +114,23 @@ func (this *HousesController) GetHouseInfo() {
 		resp["errmsg"] = models.RecodeText(models.RECODE_DBERR)
 		return
 	}
-	resp["data"] = posts
+	houses := []interface{}{}
+	for _, val := range posts {
+		data := make(map[string]interface{})
+		data["address"] = val.Address
+		data["area_name"] = val.Area.Name
+		data["ctime"] = string(val.Ctime.Format("2006-01-01 15:04:05"))
+		data["house_id"] = val.Id
+		data["img_url"] = val.Index_image_url
+		data["order_count"] = val.Order_count
+		data["price"] = val.Price
+		data["room_count"] = val.Room_count
+		data["title"] = val.Title
+		data["user_avatar"] = val.User.Avatar_url
+		houses = append(houses, data)
+	}
+	ret := make(map[string]interface{})
+	ret["houses"] = houses
+	resp["data"] = ret
 	return
 }

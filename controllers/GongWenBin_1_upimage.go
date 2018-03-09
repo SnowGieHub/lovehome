@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	_ "encoding/json"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"lovehome/models"
 	"path"
+	"strconv"
 )
 
 type UpImageControllers struct {
@@ -24,7 +24,7 @@ func (this *UpImageControllers) UpHouseImage() {
 
 	defer this.RetData(resp)
 
-	file, header, err := this.GetFile("images")
+	file, header, err := this.GetFile("house_image")
 	if err != nil {
 		resp["errno"] = models.RECODE_SERVERERR
 		resp["errmsg"] = models.RecodeText(models.RECODE_SERVERERR)
@@ -50,8 +50,9 @@ func (this *UpImageControllers) UpHouseImage() {
 	}
 	beego.Info("fdfs upload succ groupname = ", groupName, " fileid = ", fileId)
 
-	house_id := this.GetSession("house_id")
-	house := models.House{Id: house_id.(int)}
+	house_id := this.Ctx.Input.Param(":id")
+	id, _ := strconv.Atoi(house_id)
+	house := models.House{Id: id}
 
 	o := orm.NewOrm()
 	err = o.Read(&house)
@@ -61,10 +62,15 @@ func (this *UpImageControllers) UpHouseImage() {
 		return
 	}
 	image := models.HouseImage{}
-
-	image_url := "http://192.168.191.140:8080/" + fileId
+	image_url := "http://192.168.40.128:8080/" + fileId
 	image.House = &house
-	image.Url = image_url
+	image.Url = fileId
+
+	if (house.Index_image_url) == "" {
+		house.Index_image_url = fileId
+	}
+	house.Images = append(house.Images, &image)
+	o.Update(&house, "Images", "Index_image_url")
 	url_map := make(map[string]interface{})
 	_, err = o.Insert(&image)
 	if err != nil {
@@ -72,7 +78,7 @@ func (this *UpImageControllers) UpHouseImage() {
 		resp["errmsg"] = models.RECODE_DBERR
 		return
 	}
-	url_map["avatar_url"] = image_url
+	url_map["url"] = image_url
 
 	resp["data"] = url_map
 
