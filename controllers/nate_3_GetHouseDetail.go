@@ -47,6 +47,7 @@ func (this *HouseController) GetHouseDetail() {
 	o.LoadRelated(&myHouse, "Facilities")
 	o.LoadRelated(&myHouse, "Images")
 	o.LoadRelated(&myHouse, "Orders")
+	//o.LoadRelated(&myHouse.Orders, "User")
 
 	beego.Info(myHouse)
 	resp["errno"] = 0
@@ -76,17 +77,42 @@ func (this *HouseController) GetHouseDetail() {
 
 	beego.Info(houseData)
 
-	comments := make([]string, len(myHouse.Orders))
+	comments := []interface{}{}
 	//for houseData["comments"] = myHouse.
-	for _, order := range myHouse.Orders {
+
+	qs := o.QueryTable("order_house")
+	orders := []models.OrderHouse{}
+	_, err = qs.Filter("house__id__iexact", house_id).RelatedSel().All(&orders)
+	beego.Info("orders:::::::: ", orders)
+	//orders := make(map[string]interface{})
+	//o.Read(&orders)
+	//if err != nil {
+	//	if err == orm.ErrNoRows {
+	//		resp["errno"] = models.RECODE_NODATA
+	//		resp["errmsg"] = models.RecodeText(models.RECODE_NODATA)
+	//		return
+	//	} else {
+	//		resp["errno"] = models.RECODE_DBERR
+	//		resp["errmsg"] = models.RecodeText(models.RECODE_DBERR)
+	//		return
+	//	}
+	//}
+	//o.LoadRelated(&orders, "User")
+
+	for _, order := range orders {
 		beego.Info("=================", order)
-		comments = append(comments, order.Comment)
+		//comments = append(comments, order.Comment)
+		comment := make(map[string]interface{})
+		comment["comment"] = order.Comment
+		comment["ctime"] = order.Ctime
+		comment["user_name"] = order.User.Name
+		comments = append(comments, comment)
 	}
 	beego.Info("===========comments:", comments)
 	beego.Info("len() == ", len(myHouse.Orders))
 	houseData["comments"] = comments
 
-	facilities := make([]int, len(myHouse.Facilities))
+	facilities := []int{}
 	//for houseData["facilities"] = myHouse.
 	for _, facility := range myHouse.Facilities {
 		beego.Info("=================", facility)
