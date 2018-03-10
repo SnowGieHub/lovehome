@@ -40,4 +40,14 @@ func init() {
 	beego.Router("/api/v1.0/houses", &controllers.HousesController{}, "post:ReleaseHouseInfo")
 	beego.Router("/api/v1.0/houses/:id/images", &controllers.UpImageControllers{}, "post:UpHouseImage")
 
+	//3
+	//唐有利
+	//modify by rocky 房屋订单查询 //请求查看房东/租客订单信息  订单插入
+	beego.Router("/api/v1.0/user/orders", &controllers.RevHouseOrdersController{}, "get:ReviewHouseOrders")
+
+	//modify by rocky 房东同意/拒绝订单
+	beego.Router("/api/v1.0/orders/:id/status", &controllers.ApplyOrderController{}, "put:AplyOrders")
+
+	//modify by rocky  评价信息
+	beego.Router("/api/v1.0/orders/:id/comment", &controllers.EvaluateController{}, "put:EvaluateMng")
 }
