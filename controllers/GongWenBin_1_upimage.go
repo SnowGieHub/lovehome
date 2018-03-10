@@ -62,6 +62,8 @@ func (this *UpImageControllers) UpHouseImage() {
 		return
 	}
 	image := models.HouseImage{}
+	ip := this.Ctx.Input.IP()
+	port := this.Ctx.Input.Port()
 	image_url := "http://" + ip + ":" + port + "/" + fileId
 	image.House = &house
 	image.Url = fileId
